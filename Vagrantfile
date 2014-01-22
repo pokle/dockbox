@@ -26,4 +26,31 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.customize ["modifyvm", :id, "--memory", "4096"]
   end
 
+  config.vm.boot_timeout = 600 #Seconds
+
+  config.vm.provision "shell", 
+    inline: %Q{
+      
+      # These instructions are from http://docs.docker.io/en/latest/installation/ubuntulinux/#ubuntu-raring-saucy
+      
+      apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
+      echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list
+      apt-get update
+      apt-get install lxc-docker -y
+
+      # Losen up firewall rules a bit
+      sed -ri 's/^DEFAULT_FORWARD_POLICY=.*/DEFAULT_FORWARD_POLICY="ACCEPT"/' /etc/default/ufw
+      ufw reload
+      ufw allow 4243/tcp
+
+      # convenience
+      usermod -aG docker vagrant
+
+      # Docker on the network
+      echo 'DOCKER_OPTS="-H tcp://0.0.0.0:4243/"' >> /etc/default/docker 
+      stop docker
+      start docker
+
+    }
+
 end
