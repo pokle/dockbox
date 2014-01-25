@@ -48,6 +48,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       # Docker on the network
       echo 'DOCKER_OPTS="-H tcp://0.0.0.0:4243/"' >> /etc/default/docker 
+      echo 'export DOCKER_HOST=tcp://localhost:4243/' >  /etc/profile.d/docker.sh
       stop docker
       start docker
 
