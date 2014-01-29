@@ -10,3 +10,7 @@ On your Mac, use the bundled docker client:
 
 	export DOCKER_HOST=tcp://localhost:4243/
 	./docker version
+	
+And since you're brave:
+
+	cp ./docker /usr/local/bin/
