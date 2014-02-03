@@ -9,9 +9,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.network :forwarded_port, guest: 4243, host: 4243
 
-  # Create a private network, which allows host-only access to the machine
-  # using a specific IP.
-  # config.vm.network :private_network, ip: "192.168.33.10"
+  config.vm.network :private_network, ip: "192.168.8.8"
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -30,13 +28,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision "shell", 
     inline: %Q{
-      
-      # These instructions are from http://docs.docker.io/en/latest/installation/ubuntulinux/#ubuntu-raring-saucy
-      
-      apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
-      echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list
-      apt-get update
-      apt-get install lxc-docker -y
+
+      # Install docker
+      curl -sL https://get.docker.io/ | sh      
 
       # Losen up firewall rules a bit
       sed -ri 's/^DEFAULT_FORWARD_POLICY=.*/DEFAULT_FORWARD_POLICY="ACCEPT"/' /etc/default/ufw
