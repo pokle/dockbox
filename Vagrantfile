@@ -4,28 +4,37 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  #
+  # Use Ubuntu as a base image of this VM.
   config.vm.box = "saucy"
   config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/saucy/current/saucy-server-cloudimg-amd64-vagrant-disk1.box"
 
+  # We're going to start up the Docker daemon on port 4243 inside the VM,
+  # and we want to patch it through to your outside host.
   config.vm.network :forwarded_port, guest: 4243, host: 4243
-
+  
+  # The VM will always be availabe at this fixed address - so you can connect
+  # to containers you fire up with 'docker run -P' using this address
   config.vm.network :private_network, ip: "192.168.8.8"
 
-  # Create a public network, which generally matched to bridged network.
-  # Bridged networks make the machine appear as another physical device on
-  # your network.
+  # If you want to expose your VM to your local network, then uncomment this.
   # config.vm.network :public_network
 
-  # If true, then any SSH connections made will enable agent forwarding.
-  # Default value: false
+  # Forward your ssh agent, so that you can get onto github, and other nice places
   config.ssh.forward_agent = true
 
+  # Memory
   config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--memory", "4096"]
   end
 
+  # It can take quite a bit of time to install Docker, especially if you have a slow
+  # connection to the Internet. So up this number if you find installs timing out.
   config.vm.boot_timeout = 600 #Seconds
 
+  #
+  # Install docker on the VM 
   config.vm.provision "shell", 
     inline: %Q{
 
