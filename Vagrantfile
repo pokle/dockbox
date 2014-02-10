@@ -39,7 +39,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     inline: %Q{
 
       # Install docker
-      curl -sL https://get.docker.io/ | sh      
+      echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list
+      apt-get update
+      apt-get install lxc-docker -y --force-yes
 
       # Losen up firewall rules a bit
       sed -ri 's/^DEFAULT_FORWARD_POLICY=.*/DEFAULT_FORWARD_POLICY="ACCEPT"/' /etc/default/ufw
@@ -52,9 +54,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       # Docker on the network
       echo 'DOCKER_OPTS="-H tcp://0.0.0.0:4243/"' >> /etc/default/docker 
       echo 'export DOCKER_HOST=tcp://localhost:4243/' >  /etc/profile.d/docker.sh
+      
+      echo Waiting 20 seconds before restarting Docker with new configuration, to 
+      echo give it time to finish initialising...
+      sleep 20
       stop docker
       start docker
-
+      echo ------------------
+      echo All done.
     }
 
 end
