@@ -41,7 +41,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       # Install docker
       echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list
       apt-get update
-      apt-get install lxc-docker -y --force-yes
+
+      # aufs
+      kern_extras="linux-image-extra-$(uname -r)"
+      apt-get install -y -q --force-yes $kern_extras
+      modprobe aufs
+
+      # Other deps
+      apt-get install -y -q --force-yes apt-transport-https curl git vim
+
+      # lastly docker
+      apt-get install lxc-docker -y --force-yes      
 
       # Losen up firewall rules a bit
       sed -ri 's/^DEFAULT_FORWARD_POLICY=.*/DEFAULT_FORWARD_POLICY="ACCEPT"/' /etc/default/ufw
