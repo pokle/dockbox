@@ -13,7 +13,7 @@ Start up a VM running Ubuntu with Docker installed:
 
 On your Mac, use the bundled docker client:
 
-		export DOCKER_HOST=tcp://
+		export DOCKER_HOST=tcp://192.168.8.8
 		./docker version
 	
 And since you're brave:
