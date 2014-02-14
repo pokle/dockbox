@@ -42,3 +42,6 @@ To uninstall (deletes the VM, and all your work on the VM - images, containers, 
 
 		vagrant destroy
 
+Alternatives
+
+- http://www.siliconfidential.com/articles/docker-coreos-osx/
