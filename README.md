@@ -3,7 +3,16 @@ A Docker Vagrant box that's configured to be used from your Mac
 Go
 ===
 
-Go install Virtualbox and Vagrant if you don't have them already.
+Install Virtualbox, Vagrant and Homebrew
+
+- https://www.virtualbox.org/
+- http://www.vagrantup.com
+- http://brew.sh
+
+Install Docker on your Mac using Homebrew
+
+    brew update
+    brew install docker
 
 Start up a VM running Ubuntu with Docker installed:
 
@@ -14,12 +23,11 @@ Start up a VM running Ubuntu with Docker installed:
 On your Mac, use the bundled docker client:
 
 		export DOCKER_HOST=tcp://192.168.8.8
-		./docker version
+		docker version
 	
 And since you're brave:
 
-		cp ./docker /usr/local/bin/
-		echo export DOCKER_HOST=tcp:// >> ~/.bashrc
+		echo export DOCKER_HOST=tcp://192.168.8.8 >> ~/.bashrc
 
 What does all that do?
 ======================
