@@ -7,8 +7,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   #
   # Use Ubuntu as a base image of this VM.
-  config.vm.box = "saucy"
-  config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/saucy/current/saucy-server-cloudimg-amd64-vagrant-disk1.box"
+  config.vm.box = "saucy-20140310"
+  config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/saucy/20140310/saucy-server-cloudimg-amd64-vagrant-disk1.box"
 
   # We're going to start up the Docker daemon on port 4243 inside the VM,
   # and we want to patch it through to your outside host.
@@ -61,6 +61,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       sed -ri 's/^DEFAULT_FORWARD_POLICY=.*/DEFAULT_FORWARD_POLICY="ACCEPT"/' /etc/default/ufw
       ufw reload
       ufw allow 4243/tcp
+
+      # Workaround bug with 0.9.0 - https://github.com/dotcloud/docker/pull/4574
+      docker --version | grep 0.9.0 && wget -O /etc/init/docker.conf https://raw.github.com/tianon/docker/fix-cgroup-hax/contrib/init/upstart/docker.conf
 
       # convenience
       usermod -aG docker vagrant
