@@ -38,6 +38,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "shell", 
     inline: %Q{
 
+      # clean up first
+      apt-get purge -y -f --force-yes lxc-docker
+
+
       # Install docker
       echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list
       apt-get update
@@ -62,7 +66,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       usermod -aG docker vagrant
 
       # Docker on the network
-      echo 'DOCKER_OPTS="-H tcp://0.0.0.0:4243"' >> /etc/default/docker 
+      echo 'DOCKER_OPTS="-dns 8.8.8.8 -dns 8.8.4.4 -H tcp://0.0.0.0:4243"' > /etc/default/docker 
       echo 'export DOCKER_HOST=tcp://localhost:4243' >  /etc/profile.d/docker.sh
       
       echo Waiting 20 seconds before restarting Docker with new configuration, to 
